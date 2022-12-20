@@ -8,13 +8,6 @@ from sklearn.cluster import KMeans
 
 # from sklearn.cluster import _k_means
 from sklearn.cluster import _kmeans
-from sklearn.cluster.KMeans import (
-    _check_sample_weight,
-    _init_centroids,
-    _labels_inertia,
-    _tolerance,
-    _validate_center_shape,
-)
 from sklearn.preprocessing import normalize
 from sklearn.utils import check_array, check_random_state
 from sklearn.utils.extmath import row_norms, squared_norm
@@ -38,12 +31,12 @@ def _spherical_kmeans_single_lloyd(
     """
     random_state = check_random_state(random_state)
 
-    sample_weight = _check_sample_weight(sample_weight, X)
+    sample_weight = KMeans._check_sample_weight(sample_weight, X)
 
     best_labels, best_inertia, best_centers = None, None, None
 
     # init
-    centers = _init_centroids(
+    centers = KMeans._init_centroids(
         X, n_clusters, init, random_state=random_state, x_squared_norms=x_squared_norms
     )
     if verbose:
@@ -61,7 +54,7 @@ def _spherical_kmeans_single_lloyd(
         # TODO: _labels_inertia should be done with cosine distance
         #       since ||a - b|| = 2(1 - cos(a,b)) when a,b are unit normalized
         #       this doesn't really matter.
-        labels, inertia = _labels_inertia(
+        labels, inertia = KMeans._labels_inertia(
             X,
             sample_weight,
             x_squared_norms,
@@ -107,7 +100,7 @@ def _spherical_kmeans_single_lloyd(
     if center_shift_total > 0:
         # rerun E-step in case of non-convergence so that predicted labels
         # match cluster centers
-        best_labels, best_inertia = _labels_inertia(
+        best_labels, best_inertia = KMeans._labels_inertia(
             X,
             sample_weight,
             x_squared_norms,
@@ -160,11 +153,11 @@ def spherical_k_means(
         raise ValueError(
             "n_samples=%d should be >= n_clusters=%d" % (_num_samples(X), n_clusters)
         )
-    tol = _tolerance(X, tol)
+    tol = KMeans._tolerance(X, tol)
 
     if hasattr(init, "__array__"):
         init = check_array(init, dtype=X.dtype.type, order="C", copy=True)
-        _validate_center_shape(X, n_clusters, init)
+        KMeans._validate_center_shape(X, n_clusters, init)
 
         if n_init != 1:
             warnings.warn(
