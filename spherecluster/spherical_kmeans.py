@@ -56,9 +56,7 @@ def _spherical_kmeans_single_lloyd(
         labels, inertia = _kmeans._labels_inertia(
             X,
             sample_weight,
-            x_squared_norms,
             centers,
-            distances=distances,
         )
 
         # computation of the means
@@ -101,9 +99,7 @@ def _spherical_kmeans_single_lloyd(
         best_labels, best_inertia = KMeans._labels_inertia(
             X,
             sample_weight,
-            x_squared_norms,
             best_centers,
-            distances=distances,
         )
 
     return best_labels, best_inertia, best_centers, i + 1
