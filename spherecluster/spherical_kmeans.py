@@ -153,7 +153,7 @@ def spherical_k_means(
         raise ValueError(
             "n_samples=%d should be >= n_clusters=%d" % (_num_samples(X), n_clusters)
         )
-    tol = KMeans._tolerance(X, tol)
+    tol = _kmeans._tolerance(X, tol)
 
     if hasattr(init, "__array__"):
         init = check_array(init, dtype=X.dtype.type, order="C", copy=True)
