@@ -31,12 +31,12 @@ def _spherical_kmeans_single_lloyd(
     """
     random_state = check_random_state(random_state)
 
-    sample_weight = KMeans._check_sample_weight(sample_weight, X)
+    sample_weight = _kmeans._check_sample_weight(sample_weight, X)
 
     best_labels, best_inertia, best_centers = None, None, None
 
     # init
-    centers = KMeans._init_centroids(
+    centers = _kmeans._init_centroids(
         X, n_clusters, init, random_state=random_state, x_squared_norms=x_squared_norms
     )
     if verbose:
@@ -54,7 +54,7 @@ def _spherical_kmeans_single_lloyd(
         # TODO: _labels_inertia should be done with cosine distance
         #       since ||a - b|| = 2(1 - cos(a,b)) when a,b are unit normalized
         #       this doesn't really matter.
-        labels, inertia = KMeans._labels_inertia(
+        labels, inertia = _kmeans._labels_inertia(
             X,
             sample_weight,
             x_squared_norms,
