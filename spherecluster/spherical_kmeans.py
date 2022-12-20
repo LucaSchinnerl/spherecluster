@@ -24,7 +24,6 @@ def _spherical_kmeans_single_lloyd(
     x_squared_norms=None,
     random_state=None,
     tol=1e-4,
-    precompute_distances=True,
 ):
     """
     Modified from sklearn.cluster.k_means_.k_means_single_lloyd.
@@ -59,7 +58,6 @@ def _spherical_kmeans_single_lloyd(
             sample_weight,
             x_squared_norms,
             centers,
-            precompute_distances=precompute_distances,
             distances=distances,
         )
 
@@ -105,7 +103,6 @@ def _spherical_kmeans_single_lloyd(
             sample_weight,
             x_squared_norms,
             best_centers,
-            precompute_distances=precompute_distances,
             distances=distances,
         )
 
@@ -380,4 +377,4 @@ def _init_centroids(
     if sp.issparse(centers):
         centers = centers.toarray()
 
-    return 
+    return centers 
