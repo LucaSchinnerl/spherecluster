@@ -365,7 +365,7 @@ class SphericalKMeans(KMeans):
         return self
 
 def _init_centroids(
-    X, x_squared_norms, init, random_state, init_size=None, n_clusters=None
+    X, n_clusters, init, random_state, x_squared_norms
 ):
     """Compute the initial centroids.
     Parameters
