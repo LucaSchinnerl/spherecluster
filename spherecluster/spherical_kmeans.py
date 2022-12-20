@@ -7,7 +7,7 @@ from joblib import Parallel, delayed
 from sklearn.cluster import KMeans
 
 # from sklearn.cluster import _k_means
-from sklearn.cluster import _k_means_fast as _k_means
+from sklearn.cluster import _kmeans
 from sklearn.cluster.k_means_ import (
     _check_sample_weight,
     _init_centroids,
@@ -72,11 +72,11 @@ def _spherical_kmeans_single_lloyd(
 
         # computation of the means
         if sp.issparse(X):
-            centers = _k_means._centers_sparse(
+            centers = _kmeans._centers_sparse(
                 X, sample_weight, labels, n_clusters, distances
             )
         else:
-            centers = _k_means._centers_dense(
+            centers = _kmeans._centers_dense(
                 X.astype(np.float),
                 sample_weight.astype(np.float),
                 labels,
