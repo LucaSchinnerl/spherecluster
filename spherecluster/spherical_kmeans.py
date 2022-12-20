@@ -36,7 +36,7 @@ def _spherical_kmeans_single_lloyd(
     best_labels, best_inertia, best_centers = None, None, None
 
     # init
-    centers = _kmeans._init_centroids(
+    centers = _init_centroids(
         X, n_clusters, init, random_state=random_state, x_squared_norms=x_squared_norms
     )
     if verbose:
@@ -363,3 +363,54 @@ class SphericalKMeans(KMeans):
         )
 
         return self
+
+def _init_centroids(
+    X, x_squared_norms, init, random_state, init_size=None, n_clusters=None
+):
+    """Compute the initial centroids.
+    Parameters
+    ----------
+    X : {ndarray, sparse matrix} of shape (n_samples, n_features)
+        The input samples.
+    x_squared_norms : ndarray of shape (n_samples,)
+        Squared euclidean norm of each data point. Pass it if you have it
+        at hands already to avoid it being recomputed here.
+    init : {'k-means++', 'random'}, callable or ndarray of shape \
+            (n_clusters, n_features)
+        Method for initialization.
+    random_state : RandomState instance
+        Determines random number generation for centroid initialization.
+        See :term:`Glossary <random_state>`.
+    init_size : int, default=None
+        Number of samples to randomly sample for speeding up the
+        initialization (sometimes at the expense of accuracy).
+    n_centroids : int, default=None
+        Number of centroids to initialize.
+        If left to 'None' the number of centroids will be equal to
+        number of clusters to form (self.n_clusters)
+    Returns
+    -------
+    centers : ndarray of shape (n_clusters, n_features)
+    """
+    n_samples = X.shape[0]
+
+    if init_size is not None and init_size < n_samples:
+        init_indices = random_state.randint(0, n_samples, init_size)
+        X = X[init_indices]
+        x_squared_norms = x_squared_norms[init_indices]
+        n_samples = X.shape[0]
+
+    if isinstance(init, str) and init == "k-means++":
+        centers, _ = _kmeans._kmeans_plusplus(
+            X,
+            n_clusters,
+            random_state=random_state,
+            x_squared_norms=x_squared_norms,
+        )
+    else:
+        raise ValueError("Unrecognized initialization method: %r" % init)
+
+    if sp.issparse(centers):
+        centers = centers.toarray()
+
+    return 
